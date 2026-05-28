@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movies — MovieZ</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="movies.css" />
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+
+    <!-- ── HEADER (same as index) ── -->
+    <header>
+        <div class="logo">
+            <img src="images/moviez-logo.png" alt="MovieZ" height="36" />
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="movie.html" class="active">Movies</a></li>
+            <li><a href="series.html">Series</a></li>
+            <!-- <li><a href="index.html">My List</a></li> -->
+        </ul>
+        <div class="header-right">
+            <!-- movie.html aur series.html dono mein replace karo -->
+            <div class="header-right">
+                <div class="search-box" id="searchBox">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="Search movies..." autocomplete="off" />
+                    <button class="search-clear" id="searchClear">✕</button>
+                    <div class="search-dropdown" id="searchDropdown"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── SEARCH RESULTS ── -->
+    <div class="search-results hidden" id="searchResults">
+        <h2>Search Results</h2>
+        <div class="cards-row" id="searchRow"></div>
+    </div>
+
+    <!-- ── PAGE BANNER ── -->
+    <div class="page-banner" id="moviePageBanner">
+        <div class="page-banner-content">
+            <h1><i class="fa-solid fa-clapperboard"></i> Movies</h1>
+            <p>Explore thousands of movies — trending, top rated & more</p>
+        </div>
+    </div>
+
+    <!-- ── FILTER BAR ── -->
+    <div class="filter-bar">
+        <span class="filter-label">Genre</span>
+        <button class="filter-btn active" onclick="filterGenre(this, '')">All</button>
+        <button class="filter-btn" onclick="filterGenre(this, 28)">Action</button>
+        <button class="filter-btn" onclick="filterGenre(this, 35)">Comedy</button>
+        <button class="filter-btn" onclick="filterGenre(this, 27)">Horror</button>
+        <button class="filter-btn" onclick="filterGenre(this, 18)">Drama</button>
+        <button class="filter-btn" onclick="filterGenre(this, 878)">Sci-Fi</button>
+        <button class="filter-btn" onclick="filterGenre(this, 10749)">Romance</button>
+        <button class="filter-btn" onclick="filterGenre(this, 16)">Animation</button>
+        <button class="filter-btn" onclick="filterGenre(this, 53)">Thriller</button>
+    </div>
+
+    <!-- ── POPULAR MOVIES GRID ── -->
+    <div class="movies-grid-section">
+        <div class="grid-header">
+            <h2 class="grid-title">
+                <i class="fa-solid fa-fire"></i> Popular Movies
+                <span class="grid-count" id="movieCount"></span>
+            </h2>
+        </div>
+        <div class="movies-grid" id="moviesGrid"></div>
+        <div id="moviesPagination" class="pagination"></div>
+    </div>
+
+    <!-- ── SECTIONS ── -->
+    <!-- <div class="movies-section">
+        <div class="section-header">
+            <h2 class="section-title"><span class="s-icon">⭐</span> Top Rated</h2>
+        </div>
+        <div class="cards-row" id="topRatedRow"></div>
+    </div>
+
+    <div class="movies-section">
+        <div class="section-header">
+            <h2 class="section-title"><span class="s-icon">🗓️</span> Coming Soon</h2>
+        </div>
+        <div class="cards-row" id="upcomingRow"></div>
+    </div>
+
+    <div class="movies-section">
+        <div class="section-header">
+            <h2 class="section-title"><span class="s-icon">🎬</span> Now Playing</h2>
+        </div>
+        <div class="cards-row" id="nowPlayingRow"></div>
+    </div> -->
+
+    <!-- ── POPUP (same as index) ── -->
+    <div class="overlay" id="movie-overlay">
+        <div class="popup" id="movie-popup">
+            <button class="close-btn" id="popup-close">✕</button>
+            <div class="popup-top">
+                <div class="popup-left">
+                    <img src="" alt="" class="popup-poster" id="popup-poster" />
+                    <div class="popup-info">
+                        <h2 class="popup-title" id="popup-title"></h2>
+                        <p class="popup-tagline" id="popup-tagline"></p>
+                        <div class="popup-chips" id="popup-chips"></div>
+                        <p class="popup-overview" id="popup-overview"></p>
+                    </div>
+                    <button class="watchlist-btn" id="popup-watchlist"><span>+</span> Add to Watchlist</button>
+                </div>
+                <div class="popup-right">
+                    <div class="popup-trailer" id="popup-trailer">
+                        <div class="trailer-placeholder">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="popup-bottom-right">
+                        <div class="popup-cast-section">
+                            <div class="popup-section-header"><span class="popup-section-title">Cast</span></div>
+                            <div class="popup-cast-grid" id="popup-cast"></div>
+                        </div>
+                        <div class="popup-similar-section">
+                            <div class="popup-section-header"><span class="popup-section-title">Details</span></div>
+                            <div class="popup-extra-details" id="popup-extra-details"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="popup-stats" id="popup-stats"></div>
+            <div class="popup-release-banner" id="popup-release-banner">
+                <span class="release-label">RELEASING ON</span>
+                <h2 class="release-date" id="popup-release-date"></h2>
+                <span class="release-sub">IN CINEMAS WORLDWIDE</span>
+            </div>
+            <div class="popup-bottom">
+                <div class="popup-similar-section" style="padding:0">
+                    <div class="popup-section-header">
+                        <span class="popup-section-title">Similar Movies</span>
+                        <a href="#" class="popup-view-all">View All</a>
+                    </div>
+                    <div class="popup-similar-grid" id="popup-similar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── FOOTER (same as index) ── -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="footer-logo"><img src="images/moviez-logo.png" alt="MovieZ" height="36" /></div>
+                    <p class="footer-tagline">Your ultimate destination for movies, trailers & more.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4><span class="col-dot"></span>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html"><i class="fa-solid fa-chevron-right"></i>Home</a></li>
+                        <li><a href="movie.html"><i class="fa-solid fa-chevron-right"></i>Movies</a></li>
+                        <li><a href="series.html"><i class="fa-solid fa-chevron-right"></i>Series</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>My List</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4><span class="col-dot"></span>Genres</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Action</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Comedy</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Horror</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Drama</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Sci-Fi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4><span class="col-dot"></span>Support</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Help Center</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Privacy Policy</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Terms of Use</a></li>
+                        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4><span class="col-dot"></span>Newsletter</h4>
+                    <p>Get latest movie updates in your inbox.</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Enter your email..." />
+                        <button><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-divider"><span class="divider-text">© 2026 MovieZ. All rights reserved.</span></div>
+            <div class="footer-bottom">
+                <p class="footer-powered">Powered by <a href="https://www.themoviedb.org/" target="_blank">TMDB API</a>
+                </p>
+                <div class="footer-bottom-links">
+                    <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a>
+                </div>
+                <p class="footer-lang"><i class="fa-solid fa-globe"></i> English</p>
+            </div>
+        </div>
+    </footer>
+    <script src="js/script.js"></script>
+    <script src="js/movies.js"></script>
+    <script>
+        document.getElementById("hamburger").addEventListener("click", () => {
+            document.getElementById("navLinks").classList.toggle("open");
+        });
+        document.addEventListener("click", (e) => {
+            const nav = document.getElementById("navLinks");
+            const btn = document.getElementById("hamburger");
+            if (!nav.contains(e.target) && !btn.contains(e.target)) {
+                nav.classList.remove("open");
+            }
+        });
+    </script>
+</body>
+</html>
