@@ -81,7 +81,8 @@ const startHeroSlideshow = (movies) => {
     document.querySelector(".hero-bg").style.backgroundImage = `url(${heroUrl}${movie.backdrop_path})`
     document.querySelector(".hero-title").textContent = movie.title
     document.querySelector(".hero-rating").textContent = "⭐ " + movie.vote_average
-    document.querySelector(".hero-desc").textContent = movie.overview
+    const desc = movie.overview || ""
+    document.querySelector(".hero-desc").textContent = desc.length > 150 ? desc.slice(0, 150) + "..." : desc
     document.querySelector(".hero-year").textContent = movie.release_date.slice(0, 4)
     index = randomIndex()
     document.querySelector(".btn-list").onclick = () => openPop(movie.id)
